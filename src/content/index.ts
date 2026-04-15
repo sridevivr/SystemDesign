@@ -4,6 +4,7 @@ import { unit02Networking } from './unit-02-networking';
 import { unit03Scaling } from './unit-03-scaling';
 import { unit04Databases } from './unit-04-databases';
 import { unit05Caching } from './unit-05-caching';
+import { unit06AsyncQueues } from './unit-06-async-queues';
 
 // Ordered curriculum. Units are played in array order. Lessons inside
 // each unit are played in their own array order. The "next lesson" is
@@ -14,11 +15,11 @@ export const curriculum: Unit[] = [
   unit03Scaling,
   unit04Databases,
   unit05Caching,
+  unit06AsyncQueues,
 ];
 
 // Future units — not shipped yet, just a roadmap visible in code.
 //
-// - Unit 6: Async & queues (pub/sub, idempotency)
 // - Unit 7: Distributed systems (replication, sharding, CAP, consistency)
 // - Unit 8: Design patterns (rate limiting, circuit breakers)
 // - Unit 9: Real-world designs (URL shortener, chat, feed, rate limiter)

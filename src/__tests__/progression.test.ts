@@ -16,9 +16,9 @@ import { curriculum } from '../content';
 const ids = flattenLessons(curriculum).map((l) => l.id);
 
 describe('progression: lessons and unlocking', () => {
-  it('has at least five units with lessons', () => {
-    expect(curriculum.length).toBeGreaterThanOrEqual(5);
-    expect(ids.length).toBeGreaterThanOrEqual(25);
+  it('has at least six units with lessons', () => {
+    expect(curriculum.length).toBeGreaterThanOrEqual(6);
+    expect(ids.length).toBeGreaterThanOrEqual(30);
   });
 
   it('first lesson is unlocked at start, everything else is locked', () => {

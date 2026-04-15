@@ -129,8 +129,16 @@ Each unit ships with 5 lessons × 6 questions + a curated final review.
 4. **Eviction: LRU** — Netflix · DNS caches · your kitchen counter
 5. **CDNs** — Netflix Open Connect · Cloudflare · a chain bookstore
 
+### Unit 6 — Async and queues
+> Work that doesn't have to happen while the user is waiting.
+
+1. **Synchronous vs asynchronous** — Amazon checkout · Instagram posts · a waiter taking your order and walking away
+2. **Message queues** — DoorDash orders · Uber pricing events · a factory conveyor belt
+3. **Pub/sub** — Slack notifications · Stripe webhooks · a newspaper delivery subscription
+4. **Idempotency** — Stripe idempotency keys · shipping a box vs sending an email · light switch vs toggle button
+5. **Retries and dead-letter queues** — AWS SQS DLQs · Shopify webhook retries · mail that keeps getting returned
+
 ### Roadmap (not yet authored)
-- Unit 6 — Async & queues (pub/sub, idempotency)
 - Unit 7 — Distributed systems (replication, sharding, CAP, consistency)
 - Unit 8 — Design patterns (rate limiting, circuit breakers)
 - Unit 9 — Real-world designs (URL shortener, chat, feed)
@@ -169,7 +177,8 @@ src/
 │   ├── unit-02-networking.ts
 │   ├── unit-03-scaling.ts
 │   ├── unit-04-databases.ts
-│   └── unit-05-caching.ts
+│   ├── unit-05-caching.ts
+│   └── unit-06-async-queues.ts
 │
 ├── lib/
 │   ├── progression.ts         # pure helpers: flatten, next, status,
@@ -319,6 +328,36 @@ A quick record of what was built, in order, for anyone jumping in later.
   `Lesson` tuple contract that forces examples and analogies.
 - Progression test suite bumped its minimum-unit assertion from 3 to
   5 so any future regression in the curriculum surfaces immediately.
+
+### v0.5.0 — Aesthetic refresh + first public ship
+- Full visual refresh: dark mode (default "system"), indigo palette,
+  Inter + JetBrains Mono, Lucide icon set, meandering lesson path,
+  per-unit accent colors, concept diagrams on intro cards, animated
+  XP count-ups, softer celebration screens, a richer header with a
+  lesson-progress breadcrumb, an XP pill, a theme toggle, and a
+  settings menu.
+- Pre-deploy polish: mobile-safe lesson path offsets, real `<title>`
+  and Open Graph tags in `index.html`, an indigo LayoutGrid favicon,
+  and a dismissible first-visit welcome card in `LessonPath`.
+- First public ship to Cloudflare Workers (static assets) via a
+  dedicated `wrangler.jsonc`. Live at
+  https://system-design-quest.vijayaraghavansridevi.workers.dev/
+
+### v0.6.0 — Unit 6 Async and queues
+- **Unit 6 — Async and queues.** Five lessons — synchronous vs
+  asynchronous work, message queues, pub/sub, idempotency, and
+  retries / dead-letter queues — plus a 4-question `finalReview`.
+  Real-world scenarios include Amazon checkout, Instagram posts,
+  DoorDash order pipelines, Uber pricing events, Slack notifications,
+  Stripe webhooks, Stripe idempotency keys, AWS SQS dead-letter
+  queues, and Shopify webhook retries. Analogies include a waiter
+  taking your order, a factory conveyor belt, a newspaper delivery
+  subscription, a light switch vs a toggle button, and mail that
+  keeps getting returned.
+- Curriculum now runs to 30 lessons / 180 questions + 6 unit reviews
+  (24 curated cross-cutting questions).
+- Progression test suite's minimum-unit assertion bumped from 5 to 6
+  so any future curriculum regression fails immediately.
 
 ### v0.5.0 — Visual refresh ("playful but adult")
 The app used to look like a Duolingo clone, down to the #58cc02 green.
