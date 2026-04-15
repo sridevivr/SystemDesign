@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+export type Theme = 'light' | 'dark' | 'system';
+
 type ProgressState = {
   xp: number;
   completed: string[]; // lessonIds, in completion order
@@ -8,6 +10,7 @@ type ProgressState = {
   // Per-unit bucket of mistake keys (format: `${lessonId}:${questionIndex}`).
   // Accumulated as you play lessons; drained when you complete the unit review.
   mistakes: Record<string, string[]>;
+  theme: Theme;
 
   completeLesson: (
     lessonId: string,
@@ -16,6 +19,7 @@ type ProgressState = {
     wrongKeys: string[],
   ) => void;
   completeUnitReview: (unitId: string, xpAwarded: number) => void;
+  setTheme: (theme: Theme) => void;
   reset: () => void;
 };
 
@@ -26,6 +30,7 @@ export const useProgress = create<ProgressState>()(
       completed: [],
       completedReviews: [],
       mistakes: {},
+      theme: 'system',
 
       completeLesson: (lessonId, xpAwarded, unitId, wrongKeys) => {
         const state = get();
@@ -56,8 +61,15 @@ export const useProgress = create<ProgressState>()(
         });
       },
 
+      setTheme: (theme) => set({ theme }),
+
       reset: () =>
-        set({ xp: 0, completed: [], completedReviews: [], mistakes: {} }),
+        set({
+          xp: 0,
+          completed: [],
+          completedReviews: [],
+          mistakes: {},
+        }),
     }),
     { name: 'sdq.progress.v1' },
   ),

@@ -138,9 +138,13 @@ Each unit ships with 5 lessons × 6 questions + a curated final review.
 ## Tech stack
 
 - **Vite + React 18 + TypeScript** — fast dev server, strict types.
-- **TailwindCSS** — styling without bespoke CSS.
-- **Zustand** with the `persist` middleware — app state saved to
-  `localStorage` under the key `sdq.progress.v1`.
+- **TailwindCSS** with class-based dark mode — no bespoke CSS.
+- **Inter** + **JetBrains Mono** self-hosted via `@fontsource` — the
+  typography pair that feels right for a developer tool.
+- **Lucide** for iconography — no emojis in the UI.
+- **Zustand** with the `persist` middleware — app state (XP, completed
+  lessons, mistake bucket, theme preference) saved to `localStorage`
+  under `sdq.progress.v1`.
 - **Vitest + React Testing Library + jsdom** — 18 unit tests covering
   progression logic, review question selection, mistake tracking, and
   content contracts.
@@ -166,9 +170,11 @@ src/
 │   └── unit-05-caching.ts
 │
 ├── lib/
-│   └── progression.ts         # pure helpers: flatten, next, status,
-│                              # selectReviewQuestions, resolveMistakeQuestion,
-│                              # unitReviewStatus, isLastLessonInUnit, ...
+│   ├── progression.ts         # pure helpers: flatten, next, status,
+│   │                            selectReviewQuestions, resolveMistakeQuestion,
+│   │                            unitReviewStatus, isLastLessonInUnit, ...
+│   ├── theme.ts               # useTheme hook, system-preference listener
+│   └── unit-accents.ts        # per-unit colour map (sky/violet/amber/teal/pink)
 │
 ├── store/
 │   └── progress.ts            # Zustand store (xp, completed, completedReviews,
@@ -182,10 +188,11 @@ src/
 │   │                            appends review questions
 │   ├── LessonComplete.tsx     # "Lesson complete +X XP"
 │   ├── UnitReviewRunner.tsx   # end-of-unit review (mistakes + finalReview)
-│   ├── UnitComplete.tsx       # "Unit complete" celebration
+│   ├── UnitComplete.tsx       # "Unit mastered" celebration with pulse-ring trophy
+│   ├── ConceptDiagram.tsx     # inline SVG diagrams per lesson (Lucide icons + arrows)
 │   ├── IntroCard.tsx
-│   ├── ExampleCard.tsx        # "How Netflix uses this →"
-│   ├── AnalogyCard.tsx        # "Think of it like: ..."
+│   ├── ExampleCard.tsx        # "How {company} uses this"
+│   ├── AnalogyCard.tsx        # "Think of it like…"
 │   ├── CardShell.tsx          # shared card chrome with footer slot
 │   ├── QuestionCard.tsx       # shared question renderer with review badge
 │   └── questions/
@@ -310,6 +317,62 @@ A quick record of what was built, in order, for anyone jumping in later.
   `Lesson` tuple contract that forces examples and analogies.
 - Progression test suite bumped its minimum-unit assertion from 3 to
   5 so any future regression in the curriculum surfaces immediately.
+
+### v0.5.0 — Visual refresh ("playful but adult")
+The app used to look like a Duolingo clone, down to the #58cc02 green.
+This release is a full aesthetic overhaul towards an
+engineering-tool vibe — GitHub/Figma, not a kids' language app.
+
+- **New palette.** Indigo primary, emerald success, rose danger. Each
+  unit has its own accent colour via `src/lib/unit-accents.ts`:
+  foundations = sky, networking = violet, scaling = amber, databases
+  = teal, caching = pink. Accent flows everywhere that unit appears —
+  the lesson path header, the path nodes, the in-lesson progress bar,
+  the Unit Review banner.
+- **Dark mode.** Tailwind `darkMode: 'class'` plus a
+  `theme: 'light' | 'dark' | 'system'` setting persisted in the
+  Zustand store. `useTheme()` in `src/lib/theme.ts` syncs the `<html>`
+  class and listens to `prefers-color-scheme` when in system mode.
+  Every component has `dark:` twins; the header has a three-state
+  Sun/Moon/Monitor toggle.
+- **Typography.** Inter for everything UI/body, JetBrains Mono for
+  technical terms, progress counters, and XP readouts. Self-hosted
+  via `@fontsource/inter` and `@fontsource/jetbrains-mono`.
+- **Lucide icons replace every emoji.** `Check`, `Star`, `Lock`,
+  `Trophy`, `Sparkles`, `Zap`, `RotateCcw`, `Sun`, `Moon`, `Monitor`,
+  `Settings`, `X`, `LayoutGrid`, `Building2`, `Lightbulb`, `Server`,
+  `Smartphone`, `Database`.
+- **Lesson path feels like a path.** `LessonPath.tsx` redesigned as
+  a meandering column of circular accent-coloured nodes (alternating
+  `ml-0 / ml-12 / ml-20 / ml-12` offsets) connected by a dashed
+  accent line, each next to a small lesson card. The current lesson
+  has a `animate-pulse-ring` halo in its unit's accent. Unit Review
+  nodes are rotated-diamond trophies at the end of each unit.
+- **New header.** Sticky with backdrop blur, indigo brand tile,
+  `{done} / {total} lessons` progress bar, amber `Zap` XP pill, theme
+  cycle button, and a settings menu with click-outside dismissal.
+- **Softer, designed celebrations.** `LessonComplete` and
+  `UnitComplete` are now tight cards with a `useCountUp` hook easing
+  the XP readout from 0 → earned over 600ms. `UnitComplete` has a
+  large amber `Trophy` with a subtle `animate-pulse-ring` halo. No
+  big coloured slab screens, no emoji.
+- **Concept diagrams on intro cards.** New `ConceptDiagram.tsx`
+  component with a registry of inline SVG illustrations keyed by
+  `lessonId`. Each diagram composes Lucide icons (`Server`,
+  `Smartphone`, `Database`) with SVG lines, arrows, and markers, and
+  draws its "hot" stroke in the source unit's accent colour.
+  `LessonRunner` shows it above the intro card when the lesson has a
+  registered diagram — `client-server` (client ↔ server arrows),
+  `ip-ports` (building with labelled doors), `vertical-horizontal`
+  (one big box vs many small), `what-is-a-database` (client → DB),
+  `why-cache` (client → cache → origin). Returns `null` for lessons
+  not yet covered, so more can be added lesson-by-lesson without
+  touching types or content.
+- **Implementation notes.** Foundation work (Tailwind config, store,
+  hooks, unit accents lookup) was sequential; the four big component
+  redesigns ran as parallel subagents touching disjoint files. The
+  `brand` colour token is kept as an alias to indigo for a graceful
+  transition of any lingering references.
 
 ---
 

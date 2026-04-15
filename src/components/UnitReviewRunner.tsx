@@ -1,8 +1,10 @@
 import { useMemo, useState } from 'react';
+import { X } from 'lucide-react';
 import type { Question } from '../content/types';
 import { useProgress } from '../store/progress';
 import { curriculum } from '../content';
 import { resolveMistakeQuestion } from '../lib/progression';
+import { unitAccent } from '../lib/unit-accents';
 import { QuestionCard } from './QuestionCard';
 
 type Props = {
@@ -41,6 +43,7 @@ export function UnitReviewRunner({ unitId, onDone, onQuit }: Props) {
   const mistakesSnapshot = useProgress((s) => s.mistakes[unitId] ?? []);
   const completeUnitReview = useProgress((s) => s.completeUnitReview);
   const unit = curriculum.find((u) => u.id === unitId)!;
+  const accent = unitAccent(unitId);
   const reviewXp = unit.reviewXp ?? 25;
 
   // Snapshot mistakes at mount so completing the review and clearing the
@@ -54,16 +57,16 @@ export function UnitReviewRunner({ unitId, onDone, onQuit }: Props) {
 
   if (steps.length === 0) {
     return (
-      <div className="rounded-2xl border-2 border-brand bg-brand/10 p-8 text-center space-y-4">
-        <h2 className="text-xl font-bold text-brand-dark">
-          Nothing to review yet!
+      <div className="animate-fade-in rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-soft dark:border-slate-800 dark:bg-slate-900 dark:shadow-soft-dark">
+        <h2 className="text-xl font-semibold text-slate-800 dark:text-slate-100">
+          Nothing to review yet.
         </h2>
-        <p className="text-sm text-slate-600">
+        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
           Finish a few more lessons and this review will fill up.
         </p>
         <button
           onClick={onQuit}
-          className="w-full rounded-xl bg-brand text-white font-bold py-3 hover:bg-brand-dark"
+          className="mt-5 w-full rounded-2xl bg-indigo-500 px-4 py-3 font-semibold text-white transition hover:bg-indigo-600 dark:hover:bg-indigo-400"
         >
           Back
         </button>
@@ -88,24 +91,28 @@ export function UnitReviewRunner({ unitId, onDone, onQuit }: Props) {
       <div className="flex items-center gap-3">
         <button
           onClick={onQuit}
-          className="text-slate-400 hover:text-slate-600 text-xl"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-md text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-200"
           aria-label="Quit review"
         >
-          ✕
+          <X size={18} />
         </button>
-        <div className="flex-1 h-3 rounded-full bg-amber-200 overflow-hidden">
+        <div className="flex-1 h-2 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
           <div
-            className="h-full bg-amber-500 transition-all"
+            className={`h-full rounded-full ${accent.bg} ${accent.darkBg} transition-all`}
             style={{ width: `${progressPct}%` }}
           />
         </div>
-        <div className="text-xs font-semibold text-slate-500">
+        <div className="font-mono text-xs font-medium text-slate-500 dark:text-slate-400">
           {stepIdx + 1} / {steps.length}
         </div>
       </div>
 
-      <div className="rounded-xl bg-amber-50 border border-amber-200 p-3 text-sm text-amber-800">
-        <span className="font-bold">{unit.title} · Review.</span>{' '}
+      <div
+        className={`rounded-2xl border ${accent.border} ${accent.darkBorder} ${accent.bgSoft} ${accent.darkBgSoft} p-4 text-sm text-slate-700 dark:text-slate-200`}
+      >
+        <span className={`font-semibold ${accent.text} ${accent.darkText}`}>
+          {unit.title} · Review.
+        </span>{' '}
         A quick pass over anything you got wrong, plus a few extra questions to
         tie it all together.
       </div>

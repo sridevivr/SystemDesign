@@ -7,6 +7,7 @@ import { UnitReviewRunner } from './components/UnitReviewRunner';
 import { UnitComplete } from './components/UnitComplete';
 import { curriculum } from './content';
 import { flattenLessons } from './lib/progression';
+import { useTheme } from './lib/theme';
 
 type View =
   | { kind: 'home' }
@@ -20,6 +21,7 @@ type View =
   | { kind: 'unit-complete'; unitId: string; xpAwarded: number };
 
 export default function App() {
+  useTheme();
   const [view, setView] = useState<View>({ kind: 'home' });
 
   const flat = flattenLessons(curriculum);
@@ -27,7 +29,7 @@ export default function App() {
   const findUnit = (id: string) => curriculum.find((u) => u.id === id)!;
 
   return (
-    <div className="min-h-full flex flex-col">
+    <div className="min-h-full flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100">
       <Header />
       <main className="flex-1 w-full max-w-2xl mx-auto px-4 py-6">
         {view.kind === 'home' && (

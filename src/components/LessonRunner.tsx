@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { X } from 'lucide-react';
 import type { Lesson, Question } from '../content/types';
 import { useProgress } from '../store/progress';
 import { curriculum } from '../content';
@@ -8,6 +9,8 @@ import {
   unitForLesson,
   isLastLessonInUnit,
 } from '../lib/progression';
+import { unitAccent } from '../lib/unit-accents';
+import { ConceptDiagram } from './ConceptDiagram';
 import { IntroCard } from './IntroCard';
 import { ExampleCard } from './ExampleCard';
 import { AnalogyCard } from './AnalogyCard';
@@ -68,6 +71,8 @@ export function LessonRunner({ lesson, onDone, onQuit }: Props) {
   const [stepIdx, setStepIdx] = useState(0);
   const [wrongKeys, setWrongKeys] = useState<string[]>([]);
   const completeLesson = useProgress((s) => s.completeLesson);
+  const unit = unitForLesson(lesson.id, curriculum)!;
+  const accent = unitAccent(unit.id);
 
   const step = steps[stepIdx];
   const totalQuestions = steps.filter((s) => s.kind === 'question').length;
@@ -77,7 +82,6 @@ export function LessonRunner({ lesson, onDone, onQuit }: Props) {
       : null;
 
   const completeAndExit = (finalWrong: string[]) => {
-    const unit = unitForLesson(lesson.id, curriculum)!;
     completeLesson(lesson.id, lesson.xp, unit.id, finalWrong);
     onDone({
       xpAwarded: lesson.xp,
@@ -111,30 +115,33 @@ export function LessonRunner({ lesson, onDone, onQuit }: Props) {
       <div className="flex items-center gap-3">
         <button
           onClick={onQuit}
-          className="text-slate-400 hover:text-slate-600 text-xl"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-md text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-200"
           aria-label="Quit lesson"
         >
-          ✕
+          <X size={18} />
         </button>
-        <div className="flex-1 h-3 rounded-full bg-slate-200 overflow-hidden">
+        <div className="flex-1 h-2 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
           <div
-            className="h-full bg-brand transition-all"
+            className={`h-full rounded-full ${accent.bg} ${accent.darkBg} transition-all`}
             style={{ width: `${progressPct}%` }}
           />
         </div>
         {currentQuestionNumber !== null && (
-          <div className="text-xs font-semibold text-slate-500">
+          <div className="font-mono text-xs font-medium text-slate-500 dark:text-slate-400">
             {currentQuestionNumber} / {totalQuestions}
           </div>
         )}
       </div>
 
       {step.kind === 'intro' && (
-        <IntroCard
-          title={lesson.title}
-          intro={lesson.intro}
-          onContinue={advanceFromNonQuestion}
-        />
+        <div className="space-y-4 animate-fade-in">
+          <ConceptDiagram lessonId={lesson.id} />
+          <IntroCard
+            title={lesson.title}
+            intro={lesson.intro}
+            onContinue={advanceFromNonQuestion}
+          />
+        </div>
       )}
       {step.kind === 'example' && (
         <ExampleCard

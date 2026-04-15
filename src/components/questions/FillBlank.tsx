@@ -19,7 +19,9 @@ export function FillBlank({ question, onAnswered }: Props) {
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-lg font-semibold text-slate-800">{question.prompt}</p>
+      <p className="text-lg font-semibold text-slate-800 dark:text-slate-100">
+        {question.prompt}
+      </p>
       <input
         type="text"
         value={value}
@@ -32,7 +34,7 @@ export function FillBlank({ question, onAnswered }: Props) {
           }
         }}
         placeholder="Type your answer…"
-        className="rounded-xl border-2 border-slate-200 px-4 py-3 focus:border-brand outline-none"
+        className="rounded-2xl border border-slate-300 bg-white px-4 py-3 font-mono text-slate-800 outline-none transition placeholder:text-slate-400 hover:border-slate-400 focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-500 dark:hover:border-slate-500 dark:focus:border-indigo-400"
       />
 
       {!submitted ? (
@@ -42,7 +44,7 @@ export function FillBlank({ question, onAnswered }: Props) {
             setSubmitted(true);
             onAnswered(acceptable.includes(normalize(value)));
           }}
-          className="w-full rounded-xl bg-brand text-white font-bold py-3 disabled:bg-slate-300 hover:bg-brand-dark"
+          className="w-full rounded-2xl bg-indigo-500 px-4 py-3 font-semibold text-white transition hover:bg-indigo-600 disabled:bg-slate-300 disabled:hover:bg-slate-300 dark:bg-indigo-500 dark:hover:bg-indigo-400 dark:disabled:bg-slate-700 dark:disabled:text-slate-500"
         >
           Check
         </button>
