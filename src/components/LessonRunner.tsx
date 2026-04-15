@@ -104,6 +104,7 @@ export function LessonRunner({ lesson, onDone, onQuit }: Props) {
           }
         >
           <QuestionBody
+            key={`${lesson.id}:${step.index}`}
             lesson={lesson}
             stepIndex={step.index}
             onAnswered={() => setAnsweredThisStep(true)}
