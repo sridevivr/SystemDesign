@@ -9,13 +9,19 @@ import {
 } from '../lib/progression';
 import { unitAccent, type UnitAccent } from '../lib/unit-accents';
 import { useCompletedReviewsSet, useCompletedSet, useProgress } from '../store/progress';
+import { WelcomeCard } from './WelcomeCard';
 
 type Props = {
   onStart: (lessonId: string) => void;
   onStartReview: (unitId: string) => void;
 };
 
-const OFFSETS = ['ml-0', 'ml-12', 'ml-20', 'ml-12'] as const;
+const OFFSETS = [
+  'ml-0',
+  'ml-0 sm:ml-12',
+  'ml-0 sm:ml-20',
+  'ml-0 sm:ml-12',
+] as const;
 function offsetForIndex(i: number): string {
   return OFFSETS[i % OFFSETS.length];
 }
@@ -28,6 +34,8 @@ export function LessonPath({ onStart, onStartReview }: Props) {
 
   return (
     <div className="space-y-12">
+      <WelcomeCard />
+
       {next === null && (
         <div className="flex items-center gap-3 rounded-3xl border border-primary-200 bg-primary-50 p-5 shadow-soft animate-fade-in dark:border-primary-500/30 dark:bg-primary-500/10 dark:shadow-soft-dark">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary-500 text-white">
