@@ -1,58 +1,109 @@
 import { useMemo, useState } from 'react';
-import type { Lesson } from '../content/types';
+import type { Lesson, Question } from '../content/types';
 import { useProgress } from '../store/progress';
+import { curriculum } from '../content';
+import {
+  mistakeKey,
+  selectReviewQuestions,
+  unitForLesson,
+  isLastLessonInUnit,
+} from '../lib/progression';
 import { IntroCard } from './IntroCard';
 import { ExampleCard } from './ExampleCard';
 import { AnalogyCard } from './AnalogyCard';
-import { CardShell } from './CardShell';
-import { MultipleChoice } from './questions/MultipleChoice';
-import { TrueFalse } from './questions/TrueFalse';
-import { FillBlank } from './questions/FillBlank';
+import { QuestionCard } from './QuestionCard';
 
 type Props = {
   lesson: Lesson;
-  onDone: (xpAwarded: number) => void;
+  onDone: (result: {
+    xpAwarded: number;
+    wasLastInUnit: boolean;
+    unitId: string;
+  }) => void;
   onQuit: () => void;
 };
 
 // Flattened sequence of "steps" shown inside a lesson. Pedagogical order:
-// intro → examples → analogies → questions.
+// intro → examples → analogies → questions → review questions from prior
+// lessons in the same unit.
 type Step =
   | { kind: 'intro' }
   | { kind: 'example'; index: number }
   | { kind: 'analogy'; index: number }
-  | { kind: 'question'; index: number };
+  | {
+      kind: 'question';
+      question: Question;
+      sourceLessonId: string;
+      sourceQuestionIndex: number;
+      reviewFromTitle?: string;
+    };
 
 function buildSteps(lesson: Lesson): Step[] {
   const steps: Step[] = [{ kind: 'intro' }];
   lesson.examples.forEach((_, i) => steps.push({ kind: 'example', index: i }));
   lesson.analogies.forEach((_, i) => steps.push({ kind: 'analogy', index: i }));
-  lesson.questions.forEach((_, i) => steps.push({ kind: 'question', index: i }));
+  lesson.questions.forEach((q, i) =>
+    steps.push({
+      kind: 'question',
+      question: q,
+      sourceLessonId: lesson.id,
+      sourceQuestionIndex: i,
+    }),
+  );
+  const reviews = selectReviewQuestions(lesson.id, curriculum, 2);
+  for (const r of reviews) {
+    steps.push({
+      kind: 'question',
+      question: r.question,
+      sourceLessonId: r.sourceLessonId,
+      sourceQuestionIndex: r.sourceQuestionIndex,
+      reviewFromTitle: r.sourceLessonTitle,
+    });
+  }
   return steps;
 }
 
 export function LessonRunner({ lesson, onDone, onQuit }: Props) {
   const steps = useMemo(() => buildSteps(lesson), [lesson]);
   const [stepIdx, setStepIdx] = useState(0);
-  const [answeredThisStep, setAnsweredThisStep] = useState(false);
+  const [wrongKeys, setWrongKeys] = useState<string[]>([]);
   const completeLesson = useProgress((s) => s.completeLesson);
 
   const step = steps[stepIdx];
-  const totalQuestions = lesson.questions.length;
+  const totalQuestions = steps.filter((s) => s.kind === 'question').length;
   const currentQuestionNumber =
-    step.kind === 'question' ? step.index + 1 : null;
+    step.kind === 'question'
+      ? steps.slice(0, stepIdx + 1).filter((s) => s.kind === 'question').length
+      : null;
 
-  const advance = () => {
-    setAnsweredThisStep(false);
-    if (stepIdx + 1 >= steps.length) {
-      completeLesson(lesson.id, lesson.xp);
-      onDone(lesson.xp);
-      return;
-    }
+  const completeAndExit = (finalWrong: string[]) => {
+    const unit = unitForLesson(lesson.id, curriculum)!;
+    completeLesson(lesson.id, lesson.xp, unit.id, finalWrong);
+    onDone({
+      xpAwarded: lesson.xp,
+      wasLastInUnit: isLastLessonInUnit(lesson.id, curriculum),
+      unitId: unit.id,
+    });
+  };
+
+  const advanceFromNonQuestion = () => {
+    if (stepIdx + 1 >= steps.length) return completeAndExit(wrongKeys);
     setStepIdx(stepIdx + 1);
   };
 
-  // Overall progress bar: count learning-cards + questions evenly.
+  const advanceFromQuestion = (wasCorrect: boolean) => {
+    let newWrong = wrongKeys;
+    if (!wasCorrect && step.kind === 'question') {
+      const key = mistakeKey(step.sourceLessonId, step.sourceQuestionIndex);
+      if (!wrongKeys.includes(key)) {
+        newWrong = [...wrongKeys, key];
+        setWrongKeys(newWrong);
+      }
+    }
+    if (stepIdx + 1 >= steps.length) return completeAndExit(newWrong);
+    setStepIdx(stepIdx + 1);
+  };
+
   const progressPct = Math.round((stepIdx / steps.length) * 100);
 
   return (
@@ -79,53 +130,32 @@ export function LessonRunner({ lesson, onDone, onQuit }: Props) {
       </div>
 
       {step.kind === 'intro' && (
-        <IntroCard title={lesson.title} intro={lesson.intro} onContinue={advance} />
+        <IntroCard
+          title={lesson.title}
+          intro={lesson.intro}
+          onContinue={advanceFromNonQuestion}
+        />
       )}
-
       {step.kind === 'example' && (
-        <ExampleCard example={lesson.examples[step.index]} onContinue={advance} />
+        <ExampleCard
+          example={lesson.examples[step.index]}
+          onContinue={advanceFromNonQuestion}
+        />
       )}
-
       {step.kind === 'analogy' && (
-        <AnalogyCard analogy={lesson.analogies[step.index]} onContinue={advance} />
+        <AnalogyCard
+          analogy={lesson.analogies[step.index]}
+          onContinue={advanceFromNonQuestion}
+        />
       )}
-
       {step.kind === 'question' && (
-        <CardShell
-          footer={
-            answeredThisStep ? (
-              <button
-                onClick={advance}
-                className="w-full rounded-xl bg-brand text-white font-bold py-3 hover:bg-brand-dark"
-              >
-                Continue
-              </button>
-            ) : null
-          }
-        >
-          <QuestionBody
-            key={`${lesson.id}:${step.index}`}
-            lesson={lesson}
-            stepIndex={step.index}
-            onAnswered={() => setAnsweredThisStep(true)}
-          />
-        </CardShell>
+        <QuestionCard
+          key={`q-${stepIdx}`}
+          question={step.question}
+          reviewFromLessonTitle={step.reviewFromTitle}
+          onFinish={advanceFromQuestion}
+        />
       )}
     </div>
   );
-}
-
-function QuestionBody({
-  lesson,
-  stepIndex,
-  onAnswered,
-}: {
-  lesson: Lesson;
-  stepIndex: number;
-  onAnswered: () => void;
-}) {
-  const q = lesson.questions[stepIndex];
-  if (q.kind === 'mcq') return <MultipleChoice question={q} onAnswered={onAnswered} />;
-  if (q.kind === 'tf') return <TrueFalse question={q} onAnswered={onAnswered} />;
-  return <FillBlank question={q} onAnswered={onAnswered} />;
 }

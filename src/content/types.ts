@@ -53,4 +53,9 @@ export type Unit = {
   title: string;
   description: string;
   lessons: Lesson[];
+  // A small curated quiz shown at the end of the unit, AFTER any wrong-answer
+  // retries from the lessons. 3–5 questions that cut across the whole unit.
+  finalReview?: Question[];
+  // XP awarded for completing the unit review.
+  reviewXp?: number;
 };

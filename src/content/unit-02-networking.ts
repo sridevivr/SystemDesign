@@ -4,6 +4,59 @@ export const unit02Networking: Unit = {
   id: 'networking',
   title: 'Unit 2 — Networking basics',
   description: 'How clients and servers actually find and talk to each other.',
+  reviewXp: 25,
+  finalReview: [
+    {
+      kind: 'mcq',
+      prompt:
+        'You type "netflix.com" in your browser. In what order do these things roughly happen?',
+      options: [
+        'Browser opens a TCP connection → DNS lookup → HTTPS handshake → GET request',
+        'DNS lookup → Browser opens a TCP connection → HTTPS handshake → GET request',
+        'GET request → DNS lookup → HTTPS handshake → Browser opens a TCP connection',
+        'HTTPS handshake → DNS lookup → GET request → TCP connection',
+      ],
+      answerIndex: 1,
+      explain:
+        'DNS first (you need the IP), then TCP connection, then TLS/HTTPS handshake to secure it, then the actual GET request.',
+    },
+    {
+      kind: 'mcq',
+      prompt:
+        'A live voice call drops a single packet of audio. Why is UDP a better choice than TCP for this case?',
+      options: [
+        'UDP is faster because it retransmits more aggressively',
+        "Missing audio is better than a long pause waiting for a retransmit — UDP doesn't retry",
+        'TCP cannot carry audio data',
+        'UDP is more reliable than TCP',
+      ],
+      answerIndex: 1,
+      explain:
+        'Real-time media prefers freshness over completeness. A quick glitch is better than a visible stall while the network resends old data.',
+    },
+    {
+      kind: 'tf',
+      prompt:
+        "Even on HTTPS, your internet provider can still see which domain you're visiting, just not the full URL path or response body.",
+      answer: true,
+      explain:
+        'The destination name/IP is visible (so the traffic can be routed). Everything inside the tunnel — path, headers, body — is encrypted.',
+    },
+    {
+      kind: 'mcq',
+      prompt:
+        'An API you are calling returns 503. What does that most likely mean?',
+      options: [
+        'You sent a bad request — your fault',
+        'The resource does not exist',
+        'The server understood you but is temporarily unable to handle the request',
+        'The request was successful',
+      ],
+      answerIndex: 2,
+      explain:
+        '5xx = server-side problem. 503 Service Unavailable specifically means the server is up but not currently able to serve the request (overloaded, maintenance, etc.).',
+    },
+  ],
   lessons: [
     // ---------------------------------------------------------------
     {

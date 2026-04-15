@@ -4,6 +4,59 @@ export const unit01Foundations: Unit = {
   id: 'foundations',
   title: 'Unit 1 — Foundations',
   description: 'The very first ideas behind every app you use.',
+  reviewXp: 25,
+  finalReview: [
+    {
+      kind: 'mcq',
+      prompt:
+        'You are describing a chat app at a high level. Which sentence correctly uses the words client and server?',
+      options: [
+        'The server sends a request and the client replies with a response.',
+        'The client sends a request and the server replies with a response.',
+        'The client and server each send requests to a third party.',
+        'There is no client or server in a chat app.',
+      ],
+      answerIndex: 1,
+      explain:
+        'Client asks, server answers. This is the fundamental shape of almost every app.',
+    },
+    {
+      kind: 'tf',
+      prompt:
+        'A system can have very low latency but still fall over the moment thousands of users hit it at once.',
+      answer: true,
+      explain:
+        'Latency (one request) and throughput (many requests) are independent. Low latency per request says nothing about capacity.',
+    },
+    {
+      kind: 'mcq',
+      prompt:
+        'Your manager says the new service needs "four nines" of availability. That is closest to how much downtime per year?',
+      options: [
+        'About 87 hours',
+        'About 8 hours',
+        'About 53 minutes',
+        'About 5 minutes',
+      ],
+      answerIndex: 2,
+      explain:
+        '99.99% = 0.01% downtime = roughly 52.6 minutes per year. Each extra nine is ~10x less downtime.',
+    },
+    {
+      kind: 'mcq',
+      prompt:
+        'Which design is easier to scale horizontally (adding more copies of the same server)?',
+      options: [
+        'A stateful service that keeps each user session in memory',
+        'A stateless service where every request carries what it needs',
+        'A service that only accepts one client at a time',
+        'A service that stores data only on one physical disk',
+      ],
+      answerIndex: 1,
+      explain:
+        'Stateless services can be cloned freely — any copy can handle any request. Stateful services require careful routing to the copy that has your data.',
+    },
+  ],
   lessons: [
     // ---------------------------------------------------------------
     {
