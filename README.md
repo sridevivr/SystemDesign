@@ -109,9 +109,25 @@ Each unit ships with 5 lessons × 6 questions + a curated final review.
 4. **Autoscaling** — DoorDash · Zoom · opening more checkout lanes
 5. **Multi-region** — Spotify · Slack (us-east-1 outage) · coffee shop chain
 
+### Unit 4 — Databases
+> How systems remember things. The place where all the important stuff actually lives.
+
+1. **What is a database?** — Instagram · Uber · a filing cabinet with an organized clerk
+2. **Tables, rows, and queries** — Airbnb · Twitter/X · highlighting rows in a spreadsheet
+3. **Indexes** — LinkedIn · Amazon · the index at the back of a textbook
+4. **ACID and transactions** — Stripe · Venmo · a marriage ceremony
+5. **SQL vs NoSQL** — Reddit · Discord · a formal library vs a well-labeled warehouse
+
+### Unit 5 — Caching
+> Don't do work you've already done. The art of making the second request fast.
+
+1. **Why cache?** — YouTube · Wikipedia · a snack in your desk drawer
+2. **Cache hits and misses** — Instagram · Spotify · looking up a phone number
+3. **Cache invalidation** — Twitter/X · Stripe · printed paper menus
+4. **Eviction: LRU** — Netflix · DNS caches · your kitchen counter
+5. **CDNs** — Netflix Open Connect · Cloudflare · a chain bookstore
+
 ### Roadmap (not yet authored)
-- Unit 4 — Databases (SQL vs NoSQL, indexing, ACID, transactions)
-- Unit 5 — Caching (strategies, eviction, CDNs)
 - Unit 6 — Async & queues (pub/sub, idempotency)
 - Unit 7 — Distributed systems (replication, sharding, CAP, consistency)
 - Unit 8 — Design patterns (rate limiting, circuit breakers)
@@ -145,7 +161,9 @@ src/
 │   ├── README.md              # authoring rules (examples + analogies required)
 │   ├── unit-01-foundations.ts
 │   ├── unit-02-networking.ts
-│   └── unit-03-scaling.ts
+│   ├── unit-03-scaling.ts
+│   ├── unit-04-databases.ts
+│   └── unit-05-caching.ts
 │
 ├── lib/
 │   └── progression.ts         # pure helpers: flatten, next, status,
@@ -275,6 +293,23 @@ A quick record of what was built, in order, for anyone jumping in later.
 - Progression test suite expanded from 7 to 18 tests, now covering unit
   helpers, review question selection (emptiness, scope, determinism),
   mistake key round-tripping, and unit review status transitions.
+
+### v0.4.0 — Units 4 and 5 (databases + caching)
+- **Unit 4 — Databases.** Five lessons — what is a database, tables
+  and queries, indexes, ACID/transactions, and SQL vs NoSQL — plus a
+  4-question `finalReview`. Real-world scenarios include Instagram,
+  Uber, Airbnb, Twitter/X, LinkedIn, Amazon, Stripe, Venmo, Reddit
+  (PostgreSQL), and Discord (ScyllaDB).
+- **Unit 5 — Caching.** Five lessons — why cache, hits and misses,
+  cache invalidation (with Phil Karlton's famous quote), LRU eviction,
+  and CDNs — plus a 4-question `finalReview`. Real-world scenarios
+  include YouTube, Wikipedia, Instagram, Spotify, Twitter/X, Stripe,
+  Netflix Open Connect, Cloudflare, and DNS caches.
+- Curriculum now runs to 25 lessons / 150 questions + 5 unit reviews
+  (20 curated cross-cutting questions), all type-checked by the same
+  `Lesson` tuple contract that forces examples and analogies.
+- Progression test suite bumped its minimum-unit assertion from 3 to
+  5 so any future regression in the curriculum surfaces immediately.
 
 ---
 
