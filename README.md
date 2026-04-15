@@ -1,7 +1,9 @@
 # System Design Quest
 
-A local, gamified web app for learning system design one small concept at a
-time — Duolingo, but for the fundamentals that power every app you use.
+**[→ Live demo](https://system-design-quest.vijayaraghavansridevi.workers.dev/)**
+
+A gamified web app for learning system design one small concept at a time —
+Duolingo, but for the fundamentals that power every app you use.
 
 The app drives a single linear path: no topic picker, no dashboard of choices.
 You start at "what is a client and a server" and work your way up through
