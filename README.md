@@ -147,8 +147,16 @@ Each unit ships with 5 lessons × 6 questions + a curated final review.
 4. **Consistency models** — Amazon shopping cart (eventual) · banking (strong) · Google Doc vs locked Word file
 5. **Consensus** — etcd/Kubernetes (Raft) · Google Chubby (Paxos) · a jury reaching a verdict
 
+### Unit 8 — Design patterns
+> Practical engineering moves that keep systems stable under pressure.
+
+1. **Rate limiting** — GitHub API · Twitter/X API · a bouncer at a club
+2. **Circuit breakers** — Netflix Hystrix · Stripe · an electrical circuit breaker
+3. **Backpressure** — Kafka consumer lag · TCP flow control · a kitchen telling waitstaff to slow down
+4. **API gateways** — AWS API Gateway · Netflix Zuul · a hotel concierge
+5. **Load shedding and graceful degradation** — Google Search · Twitter fail whale · an ER triage nurse
+
 ### Roadmap (not yet authored)
-- Unit 8 — Design patterns (rate limiting, circuit breakers)
 - Unit 9 — Real-world designs (URL shortener, chat, feed)
 
 ---
@@ -187,7 +195,8 @@ src/
 │   ├── unit-04-databases.ts
 │   ├── unit-05-caching.ts
 │   ├── unit-06-async-queues.ts
-│   └── unit-07-distributed.ts
+│   ├── unit-07-distributed.ts
+│   └── unit-08-design-patterns.ts
 │
 ├── lib/
 │   ├── progression.ts         # pure helpers: flatten, next, status,
@@ -383,6 +392,22 @@ A quick record of what was built, in order, for anyone jumping in later.
 - Curriculum now runs to 35 lessons / 210 questions + 7 unit reviews
   (28 curated cross-cutting questions).
 - Progression test suite's minimum-unit assertion bumped from 6 to 7.
+
+### v0.8.0 — Unit 8 Design patterns
+- **Unit 8 — Design patterns.** Five lessons — rate limiting, circuit
+  breakers, backpressure, API gateways, and load shedding / graceful
+  degradation — plus a 4-question `finalReview`. Real-world scenarios
+  include GitHub API rate limits, Twitter/X API throttling, Netflix
+  Hystrix, Stripe circuit-breaking flaky payment processors, Kafka
+  consumer lag, TCP flow control, AWS API Gateway, Netflix Zuul,
+  Google Search serving cached indexes under load, and Twitter's
+  evolution from the Fail Whale to graceful degradation. Analogies
+  include a bouncer at a club, an electrical circuit breaker, a
+  kitchen telling waitstaff to slow down, a hotel concierge, and an
+  ER triage nurse.
+- Curriculum now runs to 40 lessons / 240 questions + 8 unit reviews
+  (32 curated cross-cutting questions).
+- Progression test suite's minimum-unit assertion bumped from 7 to 8.
 
 ### v0.5.0 — Visual refresh ("playful but adult")
 The app used to look like a Duolingo clone, down to the #58cc02 green.
