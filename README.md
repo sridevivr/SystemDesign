@@ -138,8 +138,16 @@ Each unit ships with 5 lessons × 6 questions + a curated final review.
 4. **Idempotency** — Stripe idempotency keys · shipping a box vs sending an email · light switch vs toggle button
 5. **Retries and dead-letter queues** — AWS SQS DLQs · Shopify webhook retries · mail that keeps getting returned
 
+### Unit 7 — Distributed systems
+> What happens when your data lives on more than one machine — and those machines disagree.
+
+1. **Replication** — Netflix · PostgreSQL streaming replicas · photocopying important documents
+2. **Sharding (partitioning)** — Discord (by guild ID) · Instagram (by user ID) · splitting a library across buildings by genre
+3. **The CAP theorem** — DynamoDB (AP) · Google Spanner (CP) · "fast, cheap, good — pick two"
+4. **Consistency models** — Amazon shopping cart (eventual) · banking (strong) · Google Doc vs locked Word file
+5. **Consensus** — etcd/Kubernetes (Raft) · Google Chubby (Paxos) · a jury reaching a verdict
+
 ### Roadmap (not yet authored)
-- Unit 7 — Distributed systems (replication, sharding, CAP, consistency)
 - Unit 8 — Design patterns (rate limiting, circuit breakers)
 - Unit 9 — Real-world designs (URL shortener, chat, feed)
 
@@ -178,7 +186,8 @@ src/
 │   ├── unit-03-scaling.ts
 │   ├── unit-04-databases.ts
 │   ├── unit-05-caching.ts
-│   └── unit-06-async-queues.ts
+│   ├── unit-06-async-queues.ts
+│   └── unit-07-distributed.ts
 │
 ├── lib/
 │   ├── progression.ts         # pure helpers: flatten, next, status,
@@ -358,6 +367,22 @@ A quick record of what was built, in order, for anyone jumping in later.
   (24 curated cross-cutting questions).
 - Progression test suite's minimum-unit assertion bumped from 5 to 6
   so any future curriculum regression fails immediately.
+
+### v0.7.0 — Unit 7 Distributed systems
+- **Unit 7 — Distributed systems.** Five lessons — replication,
+  sharding (partitioning), the CAP theorem, consistency models
+  (strong vs eventual), and consensus (Raft/Paxos) — plus a
+  4-question `finalReview`. Real-world scenarios include Netflix
+  catalog replication, PostgreSQL streaming replicas, Discord sharding
+  by guild ID, Instagram sharding by user ID, DynamoDB (AP), Google
+  Spanner (CP), Amazon's eventually-consistent shopping cart, banking
+  wire transfers, etcd/Kubernetes (Raft), and Google Chubby (Paxos).
+  Analogies include photocopying documents, splitting a library across
+  buildings, "fast cheap good pick two," a Google Doc vs a locked Word
+  file, and a jury reaching a verdict.
+- Curriculum now runs to 35 lessons / 210 questions + 7 unit reviews
+  (28 curated cross-cutting questions).
+- Progression test suite's minimum-unit assertion bumped from 6 to 7.
 
 ### v0.5.0 — Visual refresh ("playful but adult")
 The app used to look like a Duolingo clone, down to the #58cc02 green.
