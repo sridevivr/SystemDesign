@@ -7,6 +7,7 @@ import { unit05Caching } from './unit-05-caching';
 import { unit06AsyncQueues } from './unit-06-async-queues';
 import { unit07Distributed } from './unit-07-distributed';
 import { unit08DesignPatterns } from './unit-08-design-patterns';
+import { unit09RealWorld } from './unit-09-real-world';
 
 // Ordered curriculum. Units are played in array order. Lessons inside
 // each unit are played in their own array order. The "next lesson" is
@@ -20,10 +21,7 @@ export const curriculum: Unit[] = [
   unit06AsyncQueues,
   unit07Distributed,
   unit08DesignPatterns,
+  unit09RealWorld,
 ];
-
-// Future units — not shipped yet, just a roadmap visible in code.
-//
-// - Unit 9: Real-world designs (URL shortener, chat, feed, rate limiter)
 
 export type { Unit, Lesson, Question, RealWorldExample, Analogy } from './types';

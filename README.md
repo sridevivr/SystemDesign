@@ -156,8 +156,14 @@ Each unit ships with 5 lessons × 6 questions + a curated final review.
 4. **API gateways** — AWS API Gateway · Netflix Zuul · a hotel concierge
 5. **Load shedding and graceful degradation** — Google Search · Twitter fail whale · an ER triage nurse
 
-### Roadmap (not yet authored)
-- Unit 9 — Real-world designs (URL shortener, chat, feed)
+### Unit 9 — Real-world designs
+> Put it all together. Walk through the design of systems you use every day.
+
+1. **Designing a URL shortener** — Bitly · TinyURL · a coat check
+2. **Designing a chat system** — WhatsApp · Slack · walkie-talkie vs postal mail
+3. **Designing a news feed** — Instagram feed · Twitter/X timeline · a newspaper editor assembling the front page
+4. **Designing a rate limiter** — Cloudflare · Stripe (token bucket) · a water faucet with a flow restrictor
+5. **Designing a notification system** — Uber · YouTube · a postal service with multiple delivery options
 
 ---
 
@@ -196,7 +202,8 @@ src/
 │   ├── unit-05-caching.ts
 │   ├── unit-06-async-queues.ts
 │   ├── unit-07-distributed.ts
-│   └── unit-08-design-patterns.ts
+│   ├── unit-08-design-patterns.ts
+│   └── unit-09-real-world.ts
 │
 ├── lib/
 │   ├── progression.ts         # pure helpers: flatten, next, status,
@@ -408,6 +415,25 @@ A quick record of what was built, in order, for anyone jumping in later.
 - Curriculum now runs to 40 lessons / 240 questions + 8 unit reviews
   (32 curated cross-cutting questions).
 - Progression test suite's minimum-unit assertion bumped from 7 to 8.
+
+### v0.9.0 — Unit 9 Real-world designs (capstone)
+- **Unit 9 — Real-world designs.** Five capstone lessons — designing
+  a URL shortener, a chat system, a news feed, a rate limiter, and a
+  notification system — plus a 4-question `finalReview`. Each lesson
+  explicitly ties back to concepts from earlier units (caching,
+  sharding, pub/sub, async queues, idempotency, etc.). Real-world
+  scenarios include Bitly, TinyURL, WhatsApp, Slack, Instagram feed,
+  Twitter/X timeline (fan-out-on-write vs fan-out-on-read), Cloudflare
+  distributed rate limiting, Stripe token-bucket rate limiting,
+  Uber multi-channel notifications, and YouTube per-creator notification
+  preferences. Analogies include a coat check, walkie-talkie vs postal
+  mail, a newspaper editor, a water faucet with a flow restrictor,
+  and a postal service with multiple delivery options.
+- **Full curriculum complete:** 9 units / 45 lessons / 270 in-lesson
+  questions + 9 unit reviews (36 curated cross-cutting questions) =
+  **306 total questions**, taking a learner from "what is a server"
+  to "design a notification system."
+- Progression test suite's minimum-unit assertion bumped from 8 to 9.
 
 ### v0.5.0 — Visual refresh ("playful but adult")
 The app used to look like a Duolingo clone, down to the #58cc02 green.

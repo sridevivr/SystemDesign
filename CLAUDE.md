@@ -146,7 +146,7 @@ After the last lesson of a unit: automatic transition to **Unit Review** (wrong-
 - Auto-deploys on push to `claude/system-design-game-N1eLR`
 - Build command on Cloudflare: `npm run build`, output dir: `dist`
 
-## Current curriculum (7 units, 35 lessons)
+## Current curriculum (9 units, 45 lessons, 306 total questions)
 
 1. Foundations (client-server, request-response, latency/throughput, availability, stateless/stateful)
 2. Networking (IP/ports, DNS, TCP/UDP, HTTP methods, HTTPS)
@@ -155,8 +155,8 @@ After the last lesson of a unit: automatic transition to **Unit Review** (wrong-
 5. Caching (why cache, hits/misses, invalidation, LRU eviction, CDNs)
 6. Async and queues (sync vs async, message queues, pub/sub, idempotency, retries/DLQs)
 7. Distributed systems (replication, sharding, CAP theorem, consistency models, consensus)
-
-Remaining roadmap: Unit 8 (Design patterns), Unit 9 (Real-world designs).
+8. Design patterns (rate limiting, circuit breakers, backpressure, API gateways, load shedding)
+9. Real-world designs (URL shortener, chat system, news feed, rate limiter, notification system)
 
 ## Git workflow
 
